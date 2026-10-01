@@ -41,22 +41,33 @@ def income():
         return jsonify(item), 201
     return jsonify(incomes)
 
-@app.route("/categories", methods=["GET", "POST"])
+@app.route("/categories", methods=["GET", "POST", "PUT"])
 def category():
     if request.method == "POST":
         data = request.get_json()
         item = {"id": new_id(), "name": data["name"], "percent": data["percent"]}
         categories.append(item)
         return jsonify(item), 201
+    if request.method == "PUT":
+        for upd in request.get_json():
+            for c in categories:
+                if c["id"] == upd["id"]:
+                    c["percent"] = upd["percent"]
+        return jsonify(categories)
     return jsonify(categories)
 
 @app.route("/transactions", methods=["GET", "POST"])
 def transaction():
     if request.method == "POST":
         data = request.get_json()
+
+        category_name = next((c["name"] for c in categories
+                              if c["id"] == data.get("categoryId")), None)
+        t_type = data.get("type") or ("remittance" if category_name == "Sent Home" else "spend")
+
         item = {
             "id": new_id(),
-            "type": data.get("type", "spend"),   # "spend" or "remittance"
+            "type": t_type,
             "categoryId": data.get("categoryId"),
             "amount": data["amount"],
             "description": data.get("description"),
@@ -93,7 +104,7 @@ def summary():
     if not guidance:
         guidance.append(msgs["on_track"])
 
-    total_spent = sum(r["spent"] for r in rows)
+    total_spent = sum(t["amount"] for t in transactions if t["type"] == "spend")
     total_remitted = sum(t["amount"] for t in transactions if t["type"] == "remittance")
     savings_percent = max(0, 100 - sum(c["percent"] for c in categories))
 
@@ -139,7 +150,8 @@ def seed():
         lst.clear()
     incomes.append({"id": new_id(), "amount": 6000, "source": "Salary"})
     cats = {n: {"id": new_id(), "name": n, "percent": p}
-            for n, p in [("Groceries", 30), ("Transport", 15), ("Airtime", 5)]}
+            for n, p in [("Rent", 30), ("Sent Home", 20), ("Groceries", 20),
+                         ("Transport", 10), ("Airtime", 5), ("Savings", 10), ("Other", 5)]}
     categories.extend(cats.values())
 
     sample = [
