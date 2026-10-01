@@ -1,0 +1,50 @@
+/* Shared theme: link on EVERY page. Colours come from the Mukuru brief. */
+:root {
+  --black: #1A1411;
+  --orange: #E9540D;
+  --orange-dark: #C4430A;
+  --orange-soft: #FDE6D8;
+  --sand: #FDF6EE;
+  --white: #FFFFFF;
+  --ink: #241F1C;
+  --muted: #6A5F57;
+  --line: #E8DCCD;
+  --good: #2E8B57;
+  --bad: #C9362B;
+  --warn-bg: #FFF1D6;
+  --warn-ink: #8A5300;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--sand);
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.topbar { background: var(--black); border-bottom: 4px solid var(--orange); }
+.topbar-inner { max-width: 1100px; margin: 0 auto; padding: 12px 16px 8px; }
+.topbar-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--white); }
+.brand img { height: 32px; width: auto; display: block; }
+.brand-sub { color: #D8CFC6; font-size: 0.95rem; border-left: 1px solid #4A403A; padding-left: 10px; }
+
+.lang { display: flex; background: #2B221D; border-radius: 99px; padding: 3px; }
+.lang button {
+  border: none; background: none; color: #D8CFC6; font: inherit; font-size: 0.85rem;
+  font-weight: 700; padding: 6px 12px; border-radius: 99px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--orange); color: var(--black); }
+.lang button:focus-visible { outline: 3px solid var(--white); outline-offset: 1px; }
+
+.topbar nav { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; padding-bottom: 4px; }
+.topbar nav a {
+  color: #D8CFC6; text-decoration: none; padding: 8px 14px; border-radius: 99px;
+  white-space: nowrap; font-weight: 500;
+}
+.topbar nav a:hover { background: #2B221D; }
+.topbar nav a[aria-current="page"] { background: var(--orange); color: var(--black); font-weight: 700; }
+.topbar nav a:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }

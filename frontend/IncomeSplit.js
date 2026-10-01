@@ -1,4 +1,5 @@
-import { getCategories, addIncome, updateCategories } from "./src/api.js";
+import { getCategories, addIncome, updateCategories } from "./api.js";
+import { renderNav } from "./nav.js";
 
 const amountEl = document.getElementById("income-amount");
 const sourceEl = document.getElementById("income-source");
@@ -120,3 +121,6 @@ saveBtn.addEventListener("click", async () => {
         setStatus("Could not load categories. Is the backend running?", true);
     }
 })();
+
+// Render navigation
+renderNav("split");

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Income Split</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="IncomeSplit.css">
+</head>
+<body>
+    <main class="card">
+        <h2 data-i18n="splitTitle"></h2>
+        <p data-i18n="splitLead"></p>
+
+        <form id="income-form" novalidate>
+            <div>
+                <label for="income-amount" data-i18n="incomeInput"></label>
+                <input id="income-amount" type="number" inputmode="decimal" min="0" step="0.01" required>
+            </div>
+
+            <div>
+                <label for="income-source">Source (optional)</label>
+                <input id="income-source" type="text" placeholder="e.g. Salary, Bonus, Gift">
+            </div>
+
+            <div>
+                <label for="income-date" data-i18n="date"></label>
+                <input id="income-date" type="date" required>
+            </div>
+
+            <fieldset>
+                <legend data-i18n="envTitle"></legend>
+                <div id="categories"></div>
+            </fieldset>
+
+            <div>
+                <span id="total" class="total-ok"></span>
+            </div>
+
+            <button type="submit" id="save-btn" data-i18n="saveSplit">
+                Save my plan
+            </button>
+        </form>
+
+        <p id="status" role="status"></p>
+    </main>
+
+    <script type="module" src="IncomeSplit.js"></script>
+</body>
+</html>

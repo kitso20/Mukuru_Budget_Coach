@@ -1,4 +1,5 @@
-import { getCategories, addTransaction } from "./api.js"; // adjust to Teammate 3's api file
+import { getCategories, addTransaction } from "./api.js";
+import { renderNav } from "./nav.js";
 
 const form = document.getElementById("transaction-form");
 const statusEl = document.getElementById("status");
@@ -29,6 +30,9 @@ async function loadCategories() {
         setStatus("error", "Could not load categories.");
     }
 }
+
+// Render navigation
+renderNav("add");
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
