@@ -1,0 +1,57 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f5f5f5;
+}
+
+.card {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+label { display: block; margin-bottom: 4px; font-weight: 600; }
+
+input[type="number"],
+input[type="text"],
+input[type="date"],
+button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 14px;
+    font-size: 16px; /* stops iOS zooming on focus */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+button {
+    background: #1a7f4b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.hint { font-size: 14px; color: #555; }
+
+.cat-row {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+.cat-head { display: flex; justify-content: space-between; font-weight: 600; }
+.cat-amount { color: #555; font-weight: 400; font-size: 14px; }
+.cat-controls { display: flex; gap: 10px; align-items: center; margin-top: 6px; }
+.cat-controls input[type="range"] { flex: 1; }
+.cat-controls input[type="number"] { width: 72px; margin: 0; padding: 8px; }
+
+.total { font-weight: 700; }
+.total.ok { color: green; }
+.total.bad { color: crimson; }
+
+#status.ok { color: green; }
+#status.error { color: crimson; }
