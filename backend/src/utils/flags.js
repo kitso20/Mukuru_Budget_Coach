@@ -52,9 +52,11 @@ function bigTransaction(transactions) {
 
   for (const [category, txs] of Object.entries(byCategory)) {
     if (txs.length < 2) continue;
-    const avg = txs.reduce((s, t) => s + t.amount, 0) / txs.length;
 
     for (const t of txs) {
+      const others = txs.filter((x) => x.id !== t.id);
+      const avg = others.reduce((s, x) => s + x.amount, 0) / others.length;
+
       if (t.amount > avg * 3 && t.amount > 200) {
         flags.push({
           type: 'unusual_amount',
@@ -111,7 +113,7 @@ function newRecipientLarge(transactions) {
   const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
   for (let i = 0; i < sorted.length; i++) {
     const t = sorted[i];
-    if (knownRecipients.has(t.recipient) && t.amount > 500) {
+    if (!knownRecipients.has(t.recipient) && t.amount > 500) {
       flags.push({
         type: 'new_recipient_large',
         severity: 'high',
