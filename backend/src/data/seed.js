@@ -13,8 +13,43 @@ const DEFAULT_CATEGORIES = [
 
 const SALARY = { amount: 6500, source: 'Salary', date: '2026-09-01' };
 
+const INCOMES = [
+  { amount: 6500, source: 'Salary', date: '2026-07-01' },
+  { amount: 6500, source: 'Salary', date: '2026-08-01' },
+  { amount: 800, source: 'Side hustle', date: '2026-08-15' },
+  SALARY,
+  { amount: 1200, source: 'Side hustle', date: '2026-09-20' },
+  { amount: 6500, source: 'Salary', date: '2026-10-01' },
+];
+
 // ~40 realistic transactions across September 2026
 const TRANSACTIONS = [
+  // July 2026
+  { amount: 2200, merchant: 'Mr Price Property', recipient: 'Landlord', date: '2026-07-01', category: 'Rent' },
+  { amount: 1000, merchant: 'Mukuru', recipient: 'Mum - Harare', date: '2026-07-05', category: 'Sent Home' },
+  { amount: 410, merchant: 'Shoprite', recipient: 'Shoprite', date: '2026-07-03', category: 'Groceries' },
+  { amount: 320, merchant: 'Pick n Pay', recipient: 'Pick n Pay', date: '2026-07-17', category: 'Groceries' },
+  { amount: 50, merchant: 'Taxi', recipient: 'Taxi Rank', date: '2026-07-08', category: 'Transport' },
+  { amount: 60, merchant: 'Taxi', recipient: 'Taxi Rank', date: '2026-07-22', category: 'Transport' },
+  { amount: 100, merchant: 'Vodacom', recipient: 'Vodacom', date: '2026-07-10', category: 'Airtime' },
+  { amount: 500, merchant: 'Savings', recipient: 'Savings Account', date: '2026-07-15', category: 'Savings' },
+  { amount: 300, merchant: 'City Power', recipient: 'Electricity', date: '2026-07-06', category: 'Other' },
+  { amount: 95, merchant: 'Chicken Inn', recipient: 'Chicken Inn', date: '2026-07-19', category: 'Other' },
+
+  // August 2026
+  { amount: 2200, merchant: 'Mr Price Property', recipient: 'Landlord', date: '2026-08-01', category: 'Rent' },
+  { amount: 1300, merchant: 'Mukuru', recipient: 'Sister - Bulawayo', date: '2026-08-04', category: 'Sent Home' },
+  { amount: 450, merchant: 'Shoprite', recipient: 'Shoprite', date: '2026-08-02', category: 'Groceries' },
+  { amount: 370, merchant: 'Pick n Pay', recipient: 'Pick n Pay', date: '2026-08-19', category: 'Groceries' },
+  { amount: 40, merchant: 'Taxi', recipient: 'Taxi Rank', date: '2026-08-05', category: 'Transport' },
+  { amount: 55, merchant: 'Bus', recipient: 'Putco', date: '2026-08-12', category: 'Transport' },
+  { amount: 45, merchant: 'Taxi', recipient: 'Taxi Rank', date: '2026-08-26', category: 'Transport' },
+  { amount: 50, merchant: 'MTN', recipient: 'MTN', date: '2026-08-09', category: 'Airtime' },
+  { amount: 500, merchant: 'Savings', recipient: 'Savings Account', date: '2026-08-10', category: 'Savings' },
+  { amount: 290, merchant: 'City Power', recipient: 'Electricity', date: '2026-08-07', category: 'Other' },
+  { amount: 110, merchant: 'KFC', recipient: 'KFC', date: '2026-08-14', category: 'Other' },
+  { amount: 180, merchant: 'Mr Price', recipient: 'Clothing', date: '2026-08-23', category: 'Other' },
+
   // Rent
   { amount: 2200, merchant: 'Mr Price Property', recipient: 'Landlord', date: '2026-09-01', category: 'Rent' },
 
@@ -62,6 +97,13 @@ const TRANSACTIONS = [
   { amount: 1500, merchant: 'Unknown', recipient: 'New Contact', date: '2026-09-23', category: 'Other' },
   { amount: 1500, merchant: 'Unknown', recipient: 'New Contact', date: '2026-09-23', category: 'Other' }, // duplicate
   { amount: 2000, merchant: 'Prize Claim', recipient: 'Verify Account', date: '2026-09-29', category: 'Other' },
+
+  // October 2026
+  { amount: 2200, merchant: 'Mr Price Property', recipient: 'Landlord', date: '2026-10-01', category: 'Rent' },
+  { amount: 600, merchant: 'Mukuru', recipient: 'Mum - Harare', date: '2026-10-01', category: 'Sent Home' },
+  { amount: 380, merchant: 'Shoprite', recipient: 'Shoprite', date: '2026-10-02', category: 'Groceries' },
+  { amount: 45, merchant: 'Taxi', recipient: 'Taxi Rank', date: '2026-10-02', category: 'Transport' },
+  { amount: 50, merchant: 'Vodacom', recipient: 'Vodacom', date: '2026-10-02', category: 'Airtime' },
 ];
 
-module.exports = { DEFAULT_CATEGORIES, SALARY, TRANSACTIONS };
+module.exports = { DEFAULT_CATEGORIES, SALARY, INCOMES, TRANSACTIONS };

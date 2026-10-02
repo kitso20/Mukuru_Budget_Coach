@@ -2,17 +2,26 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [transactions, setTransactions] = useState([]);
-  const [summary, setSummary] = useState({ income: 0, expenses: 0, balance: 0 });
-  const [form, setForm] = useState({ description: '', amount: '', category: '', type: 'expense' });
+  const [summary, setSummary] = useState(null);
+  const [form, setForm] = useState({ merchant: '', amount: '', category: '', type: 'expense' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchData = async () => {
-    const [txRes, sumRes] = await Promise.all([
-      fetch('/api/transactions'),
-      fetch('/api/summary'),
-    ]);
-    setTransactions(await txRes.json());
-    setSummary(await sumRes.json());
+    try {
+      const [txRes, sumRes] = await Promise.all([
+        fetch('/api/transactions'),
+        fetch('/api/summary'),
+      ]);
+      const txData = await txRes.json();
+      const sumData = await sumRes.json();
+      setTransactions(Array.isArray(txData) ? txData : []);
+      setSummary(sumData);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load data. Is the backend running?');
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -22,20 +31,51 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await fetch('/api/transactions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
-    setForm({ description: '', amount: '', category: '', type: 'expense' });
+    try {
+      await fetch('/api/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      setForm({ merchant: '', amount: '', category: '', type: 'expense' });
+      fetchData();
+    } catch (err) {
+      setError('Failed to add transaction.');
+      console.error(err);
+    }
     setLoading(false);
-    fetchData();
   };
 
   const handleDelete = async (id) => {
-    await fetch(`/api/transactions/${id}`, { method: 'DELETE' });
-    fetchData();
+    try {
+      await fetch(`/api/transactions/${id}`, { method: 'DELETE' });
+      fetchData();
+    } catch (err) {
+      setError('Failed to delete transaction.');
+      console.error(err);
+    }
   };
+
+  if (error) {
+    return (
+      <div style={{ fontFamily: 'sans-serif', maxWidth: 800, margin: '0 auto', padding: 20 }}>
+        <h1>Mukuru Budget Coach</h1>
+        <p style={{ color: 'red' }}>{error}</p>
+        <button onClick={fetchData}>Retry</button>
+      </div>
+    );
+  }
+
+  if (!summary) {
+    return (
+      <div style={{ fontFamily: 'sans-serif', maxWidth: 800, margin: '0 auto', padding: 20 }}>
+        <h1>Mukuru Budget Coach</h1>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  const categories = summary.categories || [];
 
   return (
     <div style={{ fontFamily: 'sans-serif', maxWidth: 800, margin: '0 auto', padding: 20 }}>
@@ -43,17 +83,45 @@ function App() {
 
       {/* Summary Cards */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        <Card title="Income" amount={summary.income} color="green" />
-        <Card title="Expenses" amount={summary.expenses} color="red" />
-        <Card title="Balance" amount={summary.balance} color={summary.balance >= 0 ? 'green' : 'red'} />
+        <Card title="Income" amount={summary.income_total || 0} color="green" />
+        <Card title="Expenses" amount={summary.total_spent || 0} color="red" />
+        <Card title="Balance" amount={summary.balance || 0} color={(summary.balance || 0) >= 0 ? 'green' : 'red'} />
       </div>
 
+      {/* Category Breakdown */}
+      {categories.length > 0 && (
+        <>
+          <h2>Categories</h2>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
+            {categories.map((cat) => (
+              <div
+                key={cat.name}
+                style={{
+                  flex: '1 1 150px',
+                  padding: 12,
+                  border: '1px solid #ddd',
+                  borderRadius: 8,
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontSize: 12, color: '#666' }}>{cat.name}</div>
+                <div style={{ fontSize: 18, fontWeight: 'bold' }}>R{(cat.spent || 0).toFixed(0)}</div>
+                <div style={{ fontSize: 12, color: cat.percent_used > 100 ? 'red' : cat.percent_used > 80 ? 'orange' : 'green' }}>
+                  {cat.percent_used || 0}% used
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
       {/* Add Transaction Form */}
+      <h2>Add Transaction</h2>
       <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
         <input
-          placeholder="Description"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          placeholder="Merchant"
+          value={form.merchant}
+          onChange={(e) => setForm({ ...form, merchant: e.target.value })}
           required
           style={{ padding: 8, flex: 2, minWidth: 120 }}
         />
@@ -93,22 +161,22 @@ function App() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '2px solid #ddd', textAlign: 'left' }}>
-              <th style={{ padding: 8 }}>Description</th>
+              <th style={{ padding: 8 }}>Merchant</th>
               <th style={{ padding: 8 }}>Category</th>
-              <th style={{ padding: 8 }}>Type</th>
               <th style={{ padding: 8 }}>Amount</th>
+              <th style={{ padding: 8 }}>Date</th>
               <th style={{ padding: 8 }}></th>
             </tr>
           </thead>
           <tbody>
             {transactions.map((t) => (
               <tr key={t.id} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: 8 }}>{t.description}</td>
+                <td style={{ padding: 8 }}>{t.merchant}</td>
                 <td style={{ padding: 8 }}>{t.category}</td>
-                <td style={{ padding: 8 }}>{t.type}</td>
-                <td style={{ padding: 8, color: t.type === 'income' ? 'green' : 'red' }}>
-                  {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                <td style={{ padding: 8, color: 'red' }}>
+                  -R{(t.amount || 0).toFixed(2)}
                 </td>
+                <td style={{ padding: 8 }}>{new Date(t.date).toLocaleDateString()}</td>
                 <td style={{ padding: 8 }}>
                   <button onClick={() => handleDelete(t.id)} style={{ cursor: 'pointer', color: 'red' }}>
                     Delete
@@ -127,7 +195,7 @@ function Card({ title, amount, color }) {
   return (
     <div style={{ flex: 1, padding: 16, border: '1px solid #ddd', borderRadius: 8, textAlign: 'center' }}>
       <div style={{ fontSize: 14, color: '#666' }}>{title}</div>
-      <div style={{ fontSize: 24, fontWeight: 'bold', color }}>${amount.toFixed(2)}</div>
+      <div style={{ fontSize: 24, fontWeight: 'bold', color }}>R{(amount || 0).toFixed(2)}</div>
     </div>
   );
 }

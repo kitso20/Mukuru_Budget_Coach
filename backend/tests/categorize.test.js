@@ -1,5 +1,14 @@
 const { categorize } = require('../src/utils/categorize');
 
+let failures = 0;
+
+function assert(condition, message) {
+  if (!condition) {
+    console.error('  FAIL: ' + message);
+    failures++;
+  }
+}
+
 console.log('Testing categorize...');
 
 const tests = [
@@ -19,21 +28,22 @@ const tests = [
 ];
 
 let passed = 0;
-let failed = 0;
-
 for (const test of tests) {
   const result = categorize(test.merchant, test.recipient);
   if (result === test.expected) {
     passed++;
   } else {
-    console.error(`  FAIL: categorize("${test.merchant}", "${test.recipient}") = "${result}", expected "${test.expected}"`);
-    failed++;
+    console.error('  FAIL: categorize("' + test.merchant + '", "' + test.recipient + '") = "' + result + '", expected "' + test.expected + '"');
+    failures++;
   }
 }
 
-console.log(`  ${passed} passed, ${failed} failed`);
-if (failed === 0) {
-  console.log('All categorize tests passed!');
-} else {
+console.log('  ' + passed + ' passed, ' + failures + ' failed');
+
+if (failures > 0) {
+  console.error('\nCategorize tests failed!');
   process.exit(1);
+} else {
+  console.log('All categorize tests passed!');
+  process.exit(0);
 }
