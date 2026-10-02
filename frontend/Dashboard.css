@@ -1,0 +1,57 @@
+.dash { max-width: 1100px; margin: 0 auto; padding: 20px 16px 48px; }
+h1 { font-size: 1.6rem; margin: 8px 0 16px; }
+h2 { font-size: 1.1rem; margin: 0 0 12px; }
+
+/* ---- stat cards: 2 across on phones, 4 across on wider screens ---- */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+@media (min-width: 720px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+
+.stat { background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.stat-label { font-size: 0.85rem; color: var(--muted); }
+.stat-value { font-size: 1.5rem; font-weight: 700; margin-top: 2px; }
+.stat.dark { background: var(--black); border-color: var(--black); }
+.stat.dark .stat-label { color: #D8CFC6; }
+.stat.dark .stat-value { color: var(--orange); }
+.stat.dark .stat-value.neg { color: #FF8A7A; }
+
+/* ---- layout: stacked on phones, two columns on desktop ---- */
+.dash-grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 900px) {
+  .dash-grid { grid-template-columns: 1.5fr 1fr; align-items: start; }
+  aside { position: sticky; top: 16px; }
+}
+
+/* ---- envelopes ---- */
+.envelopes { display: grid; gap: 12px; }
+@media (min-width: 560px) and (max-width: 899px) { .envelopes { grid-template-columns: 1fr 1fr; } }
+
+.envelope { background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.env-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+.env-name { font-weight: 700; }
+.env-left { font-size: 0.95rem; color: var(--muted); }
+.env-left.neg { color: var(--bad); font-weight: 700; }
+.bar { height: 12px; background: #EFE6DA; border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; background: var(--good); transition: width 0.6s ease; }
+.bar-fill.warn { background: #E39A12; }
+.bar-fill.risk { background: var(--bad); }
+.env-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+.env-foot .st-warn { color: var(--warn-ink); font-weight: 700; }
+.env-foot .st-risk { color: var(--bad); font-weight: 700; }
+
+/* ---- advice ---- */
+.advice { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.advice-item { background: var(--white); border: 1px solid var(--line); border-left: 6px solid var(--muted); border-radius: 12px; padding: 12px 14px; }
+.advice-item p { margin: 4px 0 0; }
+.advice-item.risk { border-left-color: var(--bad); }
+.advice-item.warn { border-left-color: var(--orange); }
+.advice-item.good { border-left-color: var(--good); }
+.badge { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.advice-item.risk .badge { color: var(--bad); }
+.advice-item.warn .badge { color: var(--orange-dark); }
+.advice-item.good .badge { color: var(--good); }
+
+.notice { color: var(--muted); }
+.notice a { color: var(--orange-dark); font-weight: 700; }
+.error { background: #FBE4E1; color: var(--bad); border-radius: 10px; padding: 12px 14px; }
+
+@media (prefers-reduced-motion: reduce) { .bar-fill { transition: none; } }
